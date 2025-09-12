@@ -2,9 +2,9 @@
 
 ## A multi-scale multi-cellular model for Air-Liquid Interface cultures
 
-The provided code defines a multi-scale individual cell-based model to simulate and analyze within the pseudo-stratified epithelium of Air-Liquid-Interface (ALI) cultures of human airway epithelium. It relates to the following publication with details on the model structure and implementation:
+The provided code defines a multi-scale individual cell-based model to simulate and analyze viral infections within the pseudo-stratified epithelium of Air-Liquid-Interface (ALI) cultures of human airway epithelium. It relates to the following publication with details on the model structure and implementation:
 * Raach B, Bundgaard N, Haase M, Starruss J, Sotillo R, Stanifer M, Graw F: **"Influence of cell type specific infectivity and tissue composition on SARS-
-CoV-2 infection dynamics within human airway epithelium"**
+CoV-2 infection dynamics within human airway epithelium"** *PLoS Computational Biology* 2023, 19(8):e1011356 (https://doi.org/10.1371/journal.pcbi.1011356)
 
 ## Description
 The modelling environment simulates pseudo-stratified human airway epithelium considering the different cell types of basal, secretory and ciliated cells that are organized within structured layers. It considers the processes of cell proliferation and differentiation, as well as viral infection, replication and diffusion by accounting for cell-type specific effects and characteristics. The model is implemented as a cellular Potts model using Morpheus. 
