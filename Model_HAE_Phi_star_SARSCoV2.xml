@@ -1,0 +1,1258 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MorpheusModel version="4">
+    <Description>
+        <Details>Modelling heterogeneous tissue dynamics and innate immune dynamics with fixed interferon production rate to model SARS-CoV2 infection dynamics</Details>
+        <Title>Model_HAE_Phi_*_SARS_CoV2</Title>
+    </Description>
+    <Space>
+        <Lattice class="square">
+            <Neighborhood>
+                <Order>2</Order>
+            </Neighborhood>
+            <Size symbol="size" value="sqrt(3.1415*(sqrt(4*(10000/0.0414)/3.1415)*0.5 )^2),sqrt(3.1415*(sqrt(4*(10000/0.0414)/3.1415)*0.5 )^2),0"/>
+            <BoundaryConditions>
+                <Condition type="periodic" boundary="-x"/>
+                <Condition type="periodic" boundary="x"/>
+                <Condition type="periodic" boundary="-y"/>
+                <Condition type="periodic" boundary="y"/>
+            </BoundaryConditions>
+            <!--    <Disabled>
+        <Domain boundary-type="noflux">
+            <Circle diameter="554.57"/>
+        </Domain>
+    </Disabled>
+-->
+        </Lattice>
+        <SpaceSymbol symbol="space"/>
+    </Space>
+    <Time>
+        <StartTime value="0"/>
+        <StopTime value="410"/>
+        <TimeSymbol symbol="time"/>
+    </Time>
+    <Analysis>
+        <ModelGraph format="png" reduced="false" include-tags="#untagged"/>
+        <Gnuplotter decorate="false" time-step="8" condition="time == 64 or time == 120 or time == 216 or time == 312 or time == 408">
+            <Plot>
+                <Cells value="cell.type">
+                    <ColorMap adaptive-range="false">
+                        <Color value="1" color="sea-green"/>
+                        <Color value="2" color="brown4"/>
+                        <Color value="3" color="brown4"/>
+                        <Color value="4" color="medium-blue"/>
+                        <Color value="5" color="dark-violet"/>
+                        <Color value="6" color="dark-violet"/>
+                        <Color value="7" color="dark-salmon"/>
+                        <Color value="8" color="red"/>
+                        <Color value="9" color="red"/>
+                        <Color value="10" color="light-green"/>
+                        <Color value="11" color="light-blue"/>
+                        <Color value="12" color="gold"/>
+                    </ColorMap>
+                </Cells>
+            </Plot>
+            <Terminal name="png" size="2000, 2000, 0"/>
+        </Gnuplotter>
+        <Logger time-step="8">
+            <Input>
+                <Symbol symbol-ref="cell.type"/>
+                <Symbol symbol-ref="betaC"/>
+                <Symbol symbol-ref="p_infCil"/>
+                <Symbol symbol-ref="internal_load"/>
+                <Symbol symbol-ref="internal_load_IFN"/>
+                <Symbol symbol-ref="infected_neighbors"/>
+                <Symbol symbol-ref="IFN_secretion"/>
+                <Symbol symbol-ref="viralsekretion"/>
+                <Symbol symbol-ref="p_immune"/>
+                <Symbol symbol-ref="inf_neighbors"/>
+                <Symbol symbol-ref="cell.center.x"/>
+                <Symbol symbol-ref="cell.center.y"/>
+                <Symbol symbol-ref="infection_type"/>
+                <Symbol symbol-ref="beta_adjuster"/>
+                <Symbol symbol-ref="rho_adjuster"/>
+                <Symbol symbol-ref="cc_ct_ratio"/>
+                <Symbol symbol-ref="kappaIFN_sweep"/>
+                <Symbol symbol-ref="gammaIFN_exp"/>
+                <Symbol symbol-ref="rhoIFN_exp"/>
+                <Symbol symbol-ref="kappaRecovery_sweep"/>
+            </Input>
+            <Output>
+                <TextOutput/>
+            </Output>
+            <Restriction condition="time == 64 or time == 120 or time == 216 or time == 312 or time == 408"/>
+        </Logger>
+        <Logger time-step="4">
+            <Input>
+                <Symbol symbol-ref="celltype.basal.size"/>
+                <Symbol symbol-ref="celltype.secretory.size"/>
+                <Symbol symbol-ref="celltype.ciliated.size"/>
+                <Symbol symbol-ref="celltype.basal_infected.size"/>
+                <Symbol symbol-ref="celltype.secretory_infected.size"/>
+                <Symbol symbol-ref="celltype.ciliated_infected.size"/>
+                <Symbol symbol-ref="celltype.basal_infectious.size"/>
+                <Symbol symbol-ref="celltype.secretory_infectious.size"/>
+                <Symbol symbol-ref="celltype.ciliated_infectious.size"/>
+                <Symbol symbol-ref="celltype.basal_immune.size"/>
+                <Symbol symbol-ref="celltype.secretory_immune.size"/>
+                <Symbol symbol-ref="celltype.ciliated_immune.size"/>
+                <Symbol symbol-ref="total_viral_load"/>
+                <Symbol symbol-ref="total_IFN_load"/>
+            </Input>
+            <Output>
+                <TextOutput/>
+            </Output>
+            <Plots>
+                <Plot time-step="-1">
+                    <Style decorate="true" style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="celltype.basal.size"/>
+                        <Symbol symbol-ref="celltype.secretory.size"/>
+                        <Symbol symbol-ref="celltype.ciliated.size"/>
+                    </Y-axis>
+                </Plot>
+                <Plot time-step="-1">
+                    <Style style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="celltype.basal_infected.size"/>
+                        <Symbol symbol-ref="celltype.secretory_infected.size"/>
+                        <Symbol symbol-ref="celltype.ciliated_infected.size"/>
+                    </Y-axis>
+                </Plot>
+                <Plot time-step="-1">
+                    <Style style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="celltype.basal_infectious.size"/>
+                        <Symbol symbol-ref="celltype.secretory_infectious.size"/>
+                        <Symbol symbol-ref="celltype.ciliated_infectious.size"/>
+                    </Y-axis>
+                </Plot>
+                <Plot time-step="-1">
+                    <Style style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis logarithmic="true">
+                        <Symbol symbol-ref="total_viral_load"/>
+                    </Y-axis>
+                </Plot>
+                <Plot time-step="-1">
+                    <Style style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="celltype.basal_immune.size"/>
+                        <Symbol symbol-ref="celltype.secretory_immune.size"/>
+                        <Symbol symbol-ref="celltype.ciliated_immune.size"/>
+                    </Y-axis>
+                </Plot>
+                <Plot time-step="-1">
+                    <Style style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="total_IFN_load"/>
+                    </Y-axis>
+                </Plot>
+            </Plots>
+        </Logger>
+    </Analysis>
+    <Global>
+        <Constant symbol="Nmax" value="10000*1.288"/>
+        <Constant symbol="timestepsize" value="0.25"/>
+        <Constant symbol="init_cell_number" value="10000"/>
+        <Constant symbol="alphaB" value="0.338/24*timestepsize"/>
+        <Constant symbol="diffS" value="0.084/24*timestepsize*4"/>
+        <Constant symbol="diffCil" value="0.162/24*timestepsize*4"/>
+        <Constant symbol="deltaB" value="0.0139/24*timestepsize"/>
+        <Constant symbol="deltaS" value="0.083/24*timestepsize"/>
+        <Constant symbol="deltaCil" value="0.029/24*timestepsize&#xa;"/>
+        <Function symbol="cell_number">
+            <Expression>sum(celltype.secretory.size, celltype.secretory_infected.size, celltype.secretory_infectious.size ,celltype.ciliated.size, celltype.ciliated_infected.size, celltype.ciliated_infectious.size, celltype.basal.size, celltype.basal_infected.size, celltype.basal_infectious.size, 
+celltype.basal_immune.size,celltype.secretory_immune.size,celltype.ciliated_immune.size)</Expression>
+        </Function>
+        <Constant symbol="locality" value="15"/>
+        <Constant symbol="betaB" value="10^(-9.367795)/locality*10000*timestepsize/3*(1-cc_ct_ratio)*10^(-beta_adjuster)"/>
+        <Constant symbol="betaS" value="10^(-9.403180)/locality*10000*timestepsize/3*(1-cc_ct_ratio)*10^(-beta_adjuster)"/>
+        <Constant symbol="betaC" value="10^(-9.430063)*10000/locality*timestepsize*(1-cc_ct_ratio)*10^(-beta_adjuster)"/>
+        <Constant symbol="kappaB" value="4*0.192848*timestepsize"/>
+        <Constant symbol="kappaS" value="4*0.182802*timestepsize"/>
+        <Constant symbol="kappaC" value="4*0.217471*timestepsize"/>
+        <Constant symbol="rhoB" value="10^(4.376343)*timestepsize*10^(rho_adjuster)"/>
+        <Constant symbol="rhoS" value="10^(4.613919)*timestepsize*10^(rho_adjuster)"/>
+        <Constant symbol="rhoC" value="10^(4.689795)*timestepsize*10^(rho_adjuster)"/>
+        <Constant symbol="db_I" value="4*0.080933*timestepsize"/>
+        <Constant symbol="ds_I" value="4*0.077071*timestepsize"/>
+        <Constant symbol="dc_I" value="4*0.074392*timestepsize"/>
+        <Constant symbol="c" value="0.63*timestepsize"/>
+        <Field symbol="ViralLoad" value="0.0">
+            <Diffusion rate="20"/>
+        </Field>
+        <Variable symbol="add_infection" value="0"/>
+        <System time-step="1.0" solver="Bogacki-Shampine [adaptive, O(3)]">
+            <DiffEqn symbol-ref="ViralLoad">
+                <Expression>viralsekretion + add_infection - c * ViralLoad</Expression>
+            </DiffEqn>
+        </System>
+        <Event trigger="when-true">
+            <Condition>time >= 25</Condition>
+            <Rule symbol-ref="add_infection">
+                <Expression>0</Expression>
+            </Rule>
+        </Event>
+        <Event>
+            <Condition>time >= 24.5 and time &lt; 25.5</Condition>
+            <Rule symbol-ref="add_infection">
+                <Expression>2.6*10^6/((sqrt(3.1415*(sqrt(4*(init_cell_number/0.0414)/3.1415)*0.5 )^2))^2)*init_cell_number/47177*800</Expression>
+            </Rule>
+        </Event>
+        <Variable symbol="total_viral_load" value="0.0"/>
+        <Mapper>
+            <Input value="ViralLoad"/>
+            <Output symbol-ref="total_viral_load" mapping="sum"/>
+        </Mapper>
+        <Constant symbol="ccbetaB" value="1.0*cc_reduced*cc_ct_ratio/cceffectivness"/>
+        <Constant symbol="ccbetaS" value="1.536*cc_reduced*cc_ct_ratio/cceffectivness"/>
+        <Constant symbol="ccbetaC" value="4.33*cc_ct_ratio/cceffectivness"/>
+        <Constant symbol="ccrhoB" value="1*timestepsize"/>
+        <Constant symbol="ccrhoS" value="0.5786*timestepsize"/>
+        <Constant symbol="ccrhoC" value="0.48590*timestepsize"/>
+        <Constant symbol="cceffectivness" value="20"/>
+        <Constant symbol="Ninfmax" value="(1-0.397)*init_cell_number"/>
+        <Constant symbol="cc_reduced" value="0.2"/>
+        <Constant symbol="rhoIFN" value="10^(rhoIFN_exp)*timestepsize"/>
+        <Constant symbol="gammaIFN" value="10^(-gammaIFN_exp)*timestepsize"/>
+        <Field symbol="IFNLoad" value="0.0">
+            <Diffusion rate="200"/>
+        </Field>
+        <System time-step="1.0" solver="Bogacki-Shampine [adaptive, O(3)]">
+            <DiffEqn symbol-ref="IFNLoad">
+                <Expression>IFN_secretion - cIFN * IFNLoad</Expression>
+            </DiffEqn>
+        </System>
+        <Constant symbol="kappaIFN" value="4*(1/kappaIFN_sweep)*timestepsize"/>
+        <Constant symbol="kappaRecovery" value="4*(1/kappaRecovery_sweep)*timestepsize"/>
+        <Variable symbol="total_IFN_load" value="0.0"/>
+        <Mapper>
+            <Input value="IFNLoad"/>
+            <Output symbol-ref="total_IFN_load" mapping="sum"/>
+        </Mapper>
+        <Constant symbol="cc_ct_ratio" value="0.61"/>
+        <Variable symbol="tau_p" value="32"/>
+        <Variable symbol="rhoIFN_exp" value="4.553"/>
+        <Variable symbol="gammaIFN_exp" value="2.47"/>
+        <Variable symbol="kappaIFN_sweep" value="24"/>
+        <Variable symbol="kappaRecovery_sweep" value="48"/>
+        <Constant symbol="beta_adjuster" value="0.90"/>
+        <Constant symbol="rho_adjuster" value="1.68"/>
+        <Constant symbol="mcs_duration" value="1"/>
+    </Global>
+    <CellTypes>
+        <CellType class="medium" name="medium">
+            <Property symbol="viralsekretion" value="0"/>
+            <Property symbol="IFN_secretion" value="0"/>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+        </CellType>
+        <CellType class="biological" name="basal">
+            <VolumeConstraint strength="10" target="60"/>
+            <SurfaceConstraint strength="10" target=".9" mode="aspherity"/>
+            <ConnectivityConstraint/>
+            <Function symbol="p_divB">
+                <Expression>1-exp(-(alphaB*((Nmax-cell_number)/Nmax)))</Expression>
+            </Function>
+            <Function symbol="p_deathB">
+                <Expression>1-exp(-deltaB)</Expression>
+            </Function>
+            <Function symbol="p_diffS">
+                <Expression>1-exp(-diffS)</Expression>
+            </Function>
+            <AddCell overwrite="true">
+                <Count>if(cell_number > 0.53*init_cell_number, celltype.basal.size*p_divB , 0)</Count>
+                <Distribution>1</Distribution>
+                <Triggers>
+                    <Rule symbol-ref="Compartment">
+                        <Expression>0.0</Expression>
+                    </Rule>
+                </Triggers>
+            </AddCell>
+            <CellDivision division-plane="minor">
+                <Condition>rand_uni(0,1)&lt;p_divB  and (cell_number&lt;= 0.53*init_cell_number)</Condition>
+                <Triggers>
+                    <Rule symbol-ref="Compartment">
+                        <Expression>0.0</Expression>
+                    </Rule>
+                </Triggers>
+            </CellDivision>
+            <ChangeCellType name="to_secr" time-step="1.0" newCellType="secretory">
+                <Condition>Compartment==5</Condition>
+                <Triggers>
+                    <Rule symbol-ref="Compartment">
+                        <Expression>0</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <CellDeath>
+                <Condition>rand_uni(0,1)&lt; p_deathB
+</Condition>
+            </CellDeath>
+            <Property symbol="Compartment" value="rand_int(0,4)"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_diffS</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="viralsekretion" value="0"/>
+            <ChangeCellType time-step="0.0" newCellType="basal_infected">
+                <Condition>rand_uni(0,1)&lt;p_infBas</Condition>
+                <Triggers>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time</Expression>
+                    </Rule>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>1</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Function symbol="p_infBas">
+                <Expression>1-exp(-betaB*internal_load)</Expression>
+            </Function>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="internal_load" value="0.0"/>
+            <NeighborhoodReporter time-step="1.0">
+                <Input value="ccbetaB*((cell.type == celltype.basal_infectious.id)*ccrhoB + (cell.type == celltype.secretory_infectious.id)*ccrhoS + (cell.type == celltype.ciliated_infectious.id)*ccrhoC)" scaling="cell"/>
+                <Output symbol-ref="infected_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infected_neighbors" value="0.0"/>
+            <ChangeCellType newCellType="basal_infected">
+                <Condition>rand_uni(0,1)&lt;1-exp(-infected_neighbors)</Condition>
+                <Triggers>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>2</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <ChangeCellType newCellType="basal_immune">
+                <Condition>rand_uni(0,1)&lt;p_immune_B</Condition>
+            </ChangeCellType>
+            <Function symbol="p_immune_B">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="basal_infected">
+            <Property symbol="t_Bbecomeinfectious" value="0.0"/>
+            <Function symbol="p_Bbecomeinfectious">
+                <Expression>1-exp(-kappaB)</Expression>
+            </Function>
+            <ChangeCellType time-step="1.0" newCellType="basal_infectious">
+                <Condition>Compartment == 5</Condition>
+                <Triggers>
+                    <Rule symbol-ref="Compartment_IFN">
+                        <Expression>Compartment_IFN</Expression>
+                    </Rule>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time_infected</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <VolumeConstraint strength="10" target="60"/>
+            <SurfaceConstraint strength="10" target=".9" mode="aspherity"/>
+            <Property symbol="viralsekretion" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_Bbecomeinfectious</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment" value="0.0"/>
+            <ConnectivityConstraint/>
+            <Property symbol="Compartment_IFN" value="0.0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_ifn_production</Condition>
+                <Rule symbol-ref="Compartment_IFN">
+                    <Expression>Compartment_IFN + 1</Expression>
+                </Rule>
+            </Event>
+            <Function symbol="p_ifn_production">
+                <Expression>1-exp(-kappaIFN)</Expression>
+            </Function>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>Compartment_IFN == 5</Condition>
+                <Rule symbol-ref="IFN_secretion">
+                    <Expression>rhoIFN/cell.volume</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <ChangeCellType newCellType="basal_immune">
+                <Condition>rand_uni(0,1)&lt;p_immune_B </Condition>
+            </ChangeCellType>
+            <Function symbol="p_immune_B">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Function symbol="cIFN">
+                <Expression>0.1*timestepsize*(log(internal_load))</Expression>
+            </Function>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="basal_infectious">
+            <CellDeath>
+                <Condition>Compartment_d == 5</Condition>
+            </CellDeath>
+            <Function symbol="p_deathBInfectious">
+                <Expression>1-exp(-db_I)</Expression>
+            </Function>
+            <VolumeConstraint strength="10" target="60"/>
+            <SurfaceConstraint strength="10" target=".9" mode="aspherity"/>
+            <Property symbol="viralsekretion" value="rhoB/cell.volume"/>
+            <Equation symbol-ref="viralsekretion">
+                <Expression>rhoB/cell.volume * (1-(1/(1+(5000/internal_load_IFN)^2)))</Expression>
+            </Equation>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_deathBInfectious</Condition>
+                <Rule symbol-ref="Compartment_d">
+                    <Expression>Compartment_d + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment_d" value="0.0"/>
+            <ConnectivityConstraint/>
+            <Property symbol="IFN_secretion" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>Compartment_IFN == 5</Condition>
+                <Rule symbol-ref="IFN_secretion">
+                    <Expression>rhoIFN/cell.volume</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment_IFN" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <Function symbol="p_immune">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Function symbol="cIFN">
+                <Expression>0.1*timestepsize*(log(internal_load))</Expression>
+            </Function>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="secretory">
+            <VolumeConstraint strength="100" target="60"/>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <ConnectivityConstraint/>
+            <Function symbol="p_diffCil">
+                <Expression>1-exp(-diffCil)</Expression>
+            </Function>
+            <Function symbol="p_deathS">
+                <Expression>1-exp(-deltaS)</Expression>
+            </Function>
+            <CellDeath>
+                <Condition>rand_uni(0,1)&lt; p_deathS
+</Condition>
+            </CellDeath>
+            <ChangeCellType name="to_ cil" time-step="1.0" newCellType="ciliated">
+                <Condition>Compartment==5</Condition>
+            </ChangeCellType>
+            <Property symbol="Compartment" value="rand_int(0,4)"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_diffCil</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="viralsekretion" value="0"/>
+            <ChangeCellType time-step="1.0" newCellType="secretory_infected">
+                <Condition>rand_uni(0,1)&lt;p_infSec</Condition>
+                <Triggers>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time</Expression>
+                    </Rule>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>1</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Function symbol="p_infSec">
+                <Expression>1-exp(-betaS*internal_load)</Expression>
+            </Function>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="internal_load" value="0.0"/>
+            <NeighborhoodReporter time-step="1.0">
+                <Input value="ccbetaS*((cell.type == celltype.basal_infectious.id)*ccrhoB + (cell.type == celltype.secretory_infectious.id)*ccrhoS + (cell.type == celltype.ciliated_infectious.id)*ccrhoC)" scaling="cell"/>
+                <Output symbol-ref="infected_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infected_neighbors" value="0.0"/>
+            <ChangeCellType time-step="1.0" newCellType="secretory_infected">
+                <Condition>rand_uni(0,1)&lt;1-exp(-infected_neighbors)</Condition>
+                <Triggers>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>2</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <ChangeCellType newCellType="secretory_immune">
+                <Condition>rand_uni(0,1)&lt;p_immune_S</Condition>
+            </ChangeCellType>
+            <Function symbol="p_immune_S">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="secretory_infected">
+            <Property symbol="t_Sbecomeinfectious" value="0.0"/>
+            <Function symbol="p_Sbecomeinfectious">
+                <Expression>1-exp(-kappaS)</Expression>
+            </Function>
+            <ChangeCellType newCellType="secretory_infectious">
+                <Condition>Compartment == 5</Condition>
+                <Triggers>
+                    <Rule symbol-ref="Compartment_IFN">
+                        <Expression>Compartment_IFN</Expression>
+                    </Rule>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time_infected</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <VolumeConstraint strength="100" target="60"/>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <Property symbol="viralsekretion" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_Sbecomeinfectious</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment" value="0.0"/>
+            <ConnectivityConstraint/>
+            <Property symbol="Compartment_IFN" value="0.0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_ifn_production</Condition>
+                <Rule symbol-ref="Compartment_IFN">
+                    <Expression>Compartment_IFN + 1</Expression>
+                </Rule>
+            </Event>
+            <Function symbol="p_ifn_production">
+                <Expression>1-exp(-kappaIFN)</Expression>
+            </Function>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>Compartment_IFN == 5</Condition>
+                <Rule symbol-ref="IFN_secretion">
+                    <Expression>rhoIFN/cell.volume</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <ChangeCellType newCellType="secretory_immune">
+                <Condition>rand_uni(0,1)&lt;p_immune_S </Condition>
+            </ChangeCellType>
+            <Function symbol="p_immune_S">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Function symbol="cIFN">
+                <Expression>0.1*timestepsize*(log(internal_load))</Expression>
+            </Function>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="secretory_infectious">
+            <CellDeath>
+                <Condition>Compartment_d == 5</Condition>
+            </CellDeath>
+            <Function symbol="p_deathSInfectious">
+                <Expression>1 - exp(-ds_I)</Expression>
+            </Function>
+            <VolumeConstraint strength="100" target="60"/>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <Property symbol="viralsekretion" value="rhoS/cell.volume"/>
+            <Equation symbol-ref="viralsekretion">
+                <Expression>rhoS/cell.volume * (1-(1/(1+(5000/internal_load_IFN)^2)))</Expression>
+            </Equation>
+            <Property symbol="Compartment_d" value="0.0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_deathSInfectious</Condition>
+                <Rule symbol-ref="Compartment_d">
+                    <Expression>Compartment_d + 1</Expression>
+                </Rule>
+            </Event>
+            <ConnectivityConstraint/>
+            <Property symbol="IFN_secretion" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>Compartment_IFN == 5</Condition>
+                <Rule symbol-ref="IFN_secretion">
+                    <Expression>rhoIFN/cell.volume</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment_IFN" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <Function symbol="p_immune">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Function symbol="cIFN">
+                <Expression>0.1*timestepsize*(log(internal_load))</Expression>
+            </Function>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="ciliated">
+            <ConnectivityConstraint/>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <VolumeConstraint strength="100" target="60"/>
+            <CellDeath>
+                <Condition>rand_uni(0,1)&lt; p_deathCil
+</Condition>
+            </CellDeath>
+            <Function symbol="p_deathCil">
+                <Expression>1-exp(-deltaCil)</Expression>
+            </Function>
+            <Property symbol="viralsekretion" value="0"/>
+            <ChangeCellType time-step="1.0" newCellType="ciliated_infected">
+                <Condition>rand_uni(0,1)&lt;p_infCil</Condition>
+                <Triggers>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time</Expression>
+                    </Rule>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>1</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Function symbol="p_infCil">
+                <Expression>1-exp(-betaC*internal_load)</Expression>
+            </Function>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="internal_load" value="0.0"/>
+            <NeighborhoodReporter time-step="1.0">
+                <Input value="ccbetaC*((cell.type == celltype.basal_infectious.id)*ccrhoB + (cell.type == celltype.secretory_infectious.id)*ccrhoS + (cell.type == celltype.ciliated_infectious.id)*ccrhoC)" scaling="cell"/>
+                <Output symbol-ref="infected_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infected_neighbors" value="0.0"/>
+            <ChangeCellType time-step="1.0" newCellType="ciliated_infected">
+                <Condition>rand_uni(0,1)&lt;1-exp(-infected_neighbors)</Condition>
+                <Triggers>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>2</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Function symbol="testC">
+                <Expression>exp(-betaC*internal_load)</Expression>
+            </Function>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <Function symbol="p_immune_C">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <ChangeCellType newCellType="ciliated_immune">
+                <Condition>rand_uni(0,1)&lt;p_immune_C</Condition>
+            </ChangeCellType>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="ciliated_infected">
+            <Function symbol="p_Cbecomeinfectious">
+                <Expression>1-exp(-kappaC)</Expression>
+            </Function>
+            <ChangeCellType time-step="1.0" newCellType="ciliated_infectious">
+                <Condition>Compartment == 5</Condition>
+                <!--    <Disabled>
+        <Triggers>
+            <Rule symbol-ref="Compartment_IFN">
+                <Expression>Compartment_IFN</Expression>
+            </Rule>
+        </Triggers>
+    </Disabled>
+-->
+                <Triggers>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <VolumeConstraint strength="100" target="60"/>
+            <Property symbol="t_birth_cil_inf" value="0.0"/>
+            <Property symbol="viralsekretion" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_Cbecomeinfectious</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment" value="0.0"/>
+            <ConnectivityConstraint/>
+            <Property symbol="Compartment_IFN" value="0.0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_ifn_production</Condition>
+                <Rule symbol-ref="Compartment_IFN">
+                    <Expression>Compartment_IFN + 1</Expression>
+                </Rule>
+            </Event>
+            <Function symbol="p_ifn_production">
+                <Expression>1-exp(-kappaIFN)</Expression>
+            </Function>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>Compartment_IFN == 5</Condition>
+                <Rule symbol-ref="IFN_secretion">
+                    <Expression>rhoIFN/cell.volume</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <ChangeCellType time-step="0.0" newCellType="ciliated_immune">
+                <Condition>rand_uni(0,1)&lt;p_immune_C </Condition>
+            </ChangeCellType>
+            <Function symbol="p_immune_C">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Function symbol="cIFN">
+                <Expression>0.1*timestepsize*(log(internal_load))</Expression>
+            </Function>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="ciliated_infectious">
+            <CellDeath>
+                <Condition>Compartment_d == 5</Condition>
+            </CellDeath>
+            <Function symbol="p_deathCInfectious">
+                <Expression>1 - exp(-dc_I)</Expression>
+            </Function>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <VolumeConstraint strength="100" target="60"/>
+            <Property symbol="t_birth_cil" value="0.0"/>
+            <Property symbol="viralsekretion" value="rhoC/cell.volume"/>
+            <Equation symbol-ref="viralsekretion">
+                <Expression>rhoC/cell.volume * (1-(1/(1+(5000/internal_load_IFN)^2)))</Expression>
+            </Equation>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_deathCInfectious</Condition>
+                <Rule symbol-ref="Compartment_d">
+                    <Expression>Compartment_d + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment_d" value="0.0"/>
+            <ConnectivityConstraint/>
+            <Property symbol="IFN_secretion" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>Compartment_IFN == 5</Condition>
+                <Rule symbol-ref="IFN_secretion">
+                    <Expression>rhoIFN/cell.volume</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment_IFN" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Mapper name="internal IFN load" time-step="1.0">
+                <Input value="IFNLoad"/>
+                <Output symbol-ref="internal_load_IFN" mapping="sum"/>
+            </Mapper>
+            <Function symbol="p_immune">
+                <Expression>1-exp(-gammaIFN*internal_load_IFN)</Expression>
+            </Function>
+            <Function symbol="cIFN">
+                <Expression>0.1*timestepsize*(log(internal_load))</Expression>
+            </Function>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="basal_immune">
+            <VolumeConstraint strength="10" target="60"/>
+            <SurfaceConstraint strength="10" target=".9" mode="aspherity"/>
+            <ConnectivityConstraint/>
+            <Function symbol="p_divB">
+                <Expression>1-exp(-(alphaB*((Nmax-cell_number)/Nmax)))</Expression>
+            </Function>
+            <Function symbol="p_deathB">
+                <Expression>1-exp(-deltaB)</Expression>
+            </Function>
+            <Function symbol="p_diffS">
+                <Expression>1-exp(-diffS)</Expression>
+            </Function>
+            <AddCell overwrite="true">
+                <Count>if(cell_number > 0.53*init_cell_number, celltype.basal_immune.size*p_divB , 0)</Count>
+                <Distribution>1</Distribution>
+                <Triggers>
+                    <Rule symbol-ref="Compartment">
+                        <Expression>0.0</Expression>
+                    </Rule>
+                </Triggers>
+            </AddCell>
+            <CellDivision division-plane="minor">
+                <Condition>rand_uni(0,1)&lt;p_divB  and (cell_number&lt;= 0.53*init_cell_number)</Condition>
+                <Triggers>
+                    <Rule symbol-ref="Compartment">
+                        <Expression>0.0</Expression>
+                    </Rule>
+                </Triggers>
+            </CellDivision>
+            <ChangeCellType name="to_secr" time-step="1.0" newCellType="secretory_immune">
+                <Condition>Compartment==5</Condition>
+                <Triggers>
+                    <Rule symbol-ref="Compartment">
+                        <Expression>0</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <CellDeath>
+                <Condition>rand_uni(0,1)&lt; p_deathB
+</Condition>
+            </CellDeath>
+            <Property symbol="Compartment" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_diffS</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="viralsekretion" value="0"/>
+            <Function symbol="p_infBas">
+                <Expression>0</Expression>
+            </Function>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="internal_load" value="0.0"/>
+            <NeighborhoodReporter time-step="1.0">
+                <Input value="ccbetaB*((cell.type == celltype.basal_infectious.id)*ccrhoB + (cell.type == celltype.secretory_infectious.id)*ccrhoS + (cell.type == celltype.ciliated_infectious.id)*ccrhoC)" scaling="cell"/>
+                <Output symbol-ref="infected_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infected_neighbors" value="0.0"/>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Property symbol="Compartment_Recovered" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_recovery</Condition>
+                <Rule symbol-ref="Compartment_Recovered">
+                    <Expression>Compartment_Recovered + 1</Expression>
+                </Rule>
+            </Event>
+            <ChangeCellType newCellType="basal">
+                <Condition>Compartment_Recovered == 5</Condition>
+            </ChangeCellType>
+            <Function symbol="p_recovery">
+                <Expression>1-exp(-kappaRecovery)</Expression>
+            </Function>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="secretory_immune">
+            <VolumeConstraint strength="100" target="60"/>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <ConnectivityConstraint/>
+            <Function symbol="p_deathS">
+                <Expression>1-exp(-deltaS)</Expression>
+            </Function>
+            <Function symbol="p_diffCil">
+                <Expression>1-exp(-diffCil)</Expression>
+            </Function>
+            <Property symbol="Compartment" value="0"/>
+            <ChangeCellType name="to_cil" time-step="1.0" newCellType="ciliated">
+                <Condition>Compartment==5</Condition>
+                <!--    <Disabled>
+        <Triggers>
+            <Rule symbol-ref="Compartment">
+                <Expression>0</Expression>
+            </Rule>
+        </Triggers>
+    </Disabled>
+-->
+            </ChangeCellType>
+            <CellDeath>
+                <Condition>rand_uni(0,1)&lt; p_deathS
+</Condition>
+            </CellDeath>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_diffCil</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="viralsekretion" value="0"/>
+            <Function symbol="p_infBas">
+                <Expression>0</Expression>
+            </Function>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="internal_load" value="0.0"/>
+            <NeighborhoodReporter time-step="1.0">
+                <Input value="ccbetaB*((cell.type == celltype.basal_infectious.id)*ccrhoB + (cell.type == celltype.secretory_infectious.id)*ccrhoS + (cell.type == celltype.ciliated_infectious.id)*ccrhoC)" scaling="cell"/>
+                <Output symbol-ref="infected_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infected_neighbors" value="0.0"/>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Property symbol="Compartment_Recovered" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_recovery</Condition>
+                <Rule symbol-ref="Compartment_Recovered">
+                    <Expression>Compartment_Recovered + 1</Expression>
+                </Rule>
+            </Event>
+            <ChangeCellType newCellType="secretory_immune">
+                <Condition>Compartment_Recovered == 5</Condition>
+            </ChangeCellType>
+            <Function symbol="p_recovery">
+                <Expression>1-exp(-kappaRecovery)</Expression>
+            </Function>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="ciliated_immune">
+            <VolumeConstraint strength="100" target="60"/>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <ConnectivityConstraint/>
+            <Function symbol="p_deathCil">
+                <Expression>1-exp(-deltaCil)</Expression>
+            </Function>
+            <CellDeath>
+                <Condition>rand_uni(0,1)&lt; p_deathCil
+</Condition>
+            </CellDeath>
+            <Property symbol="viralsekretion" value="0"/>
+            <Function symbol="p_infBas">
+                <Expression>0</Expression>
+            </Function>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="internal_load" value="0.0"/>
+            <NeighborhoodReporter time-step="1.0">
+                <Input value="ccbetaB*((cell.type == celltype.basal_infectious.id)*ccrhoB + (cell.type == celltype.secretory_infectious.id)*ccrhoS + (cell.type == celltype.ciliated_infectious.id)*ccrhoC)" scaling="cell"/>
+                <Output symbol-ref="infected_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infected_neighbors" value="0.0"/>
+            <Property symbol="IFN_secretion" value="0.0"/>
+            <Property symbol="internal_load_IFN" value="0.0"/>
+            <Property symbol="Compartment_Recovered" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_recovery</Condition>
+                <Rule symbol-ref="Compartment_Recovered">
+                    <Expression>Compartment_Recovered + 1</Expression>
+                </Rule>
+            </Event>
+            <ChangeCellType newCellType="ciliated">
+                <Condition>Compartment_Recovered == 5</Condition>
+            </ChangeCellType>
+            <Function symbol="p_recovery">
+                <Expression>1-exp(-kappaRecovery)</Expression>
+            </Function>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+    </CellTypes>
+    <CellPopulations>
+        <Population type="basal" name="basal" size="0">
+            <!--    <Disabled>
+        <InitCircle number-of-cells="0.397*init_cell_number" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0.397*init_cell_number" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="secretory" name="secretory" size="0">
+            <!--    <Disabled>
+        <InitCircle name="secretory" number-of-cells="0.134*init_cell_number" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0.134*init_cell_number" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="ciliated" name="ciliated" size="0">
+            <!--    <Disabled>
+        <InitCircle name="ciliated" number-of-cells="0.469*init_cell_number" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0.469*init_cell_number" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="basal_infected" name="basal infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="secretory_infected" name="ciliated infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="ciliated_infected" name="secretory infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="basal_infectious" name="basal infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="secretory_infectious" name="basal infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="ciliated_infectious" name="basal infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="basal_immune" name="basal infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="secretory_immune" name="basal infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+        <Population type="ciliated_immune" name="basal infectious" size="0">
+            <!--    <Disabled>
+        <InitCircle name="" number-of-cells="0" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="0" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+    </CellPopulations>
+    <CPM>
+        <Interaction>
+            <Contact value="-20" type1="ciliated" type2="secretory"/>
+            <Contact value="10" type1="ciliated" type2="ciliated"/>
+            <Contact value="50" type1="secretory" type2="secretory"/>
+            <Contact value="-10" type1="ciliated" type2="medium"/>
+            <Contact value="-10" type1="secretory" type2="medium"/>
+            <Contact value="50" type1="basal" type2="basal"/>
+            <Contact value="-30" type1="basal" type2="ciliated"/>
+            <Contact value="-30" type1="basal" type2="secretory"/>
+        </Interaction>
+        <ShapeSurface scaling="norm">
+            <Neighborhood>
+                <Order>6</Order>
+            </Neighborhood>
+        </ShapeSurface>
+        <MonteCarloSampler stepper="edgelist">
+            <MCSDuration value="1"/>
+            <MetropolisKinetics temperature="37"/>
+            <Neighborhood>
+                <Order>2</Order>
+            </Neighborhood>
+        </MonteCarloSampler>
+    </CPM>
+</MorpheusModel>
