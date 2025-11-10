@@ -17,3 +17,19 @@ The repository contains supporting movies that accompany the aforementioned arti
 
 * **Movie1:** Simulation of growth of ALI-culture system for bronchial epithelium. Basal cells (green) are “overgrown” by secretory (blue) and ciliated (orange) cells over time leading to a pseudo-stratified epithelium. A reduced cell number is simulated with simulations started with a low number of cells (N~1265) to improve visualization of specific dynamics. Dynamics is followed over 100 days. Model implementation and parameterizations are given in detail in Materials & Methods.
 * **Movie2-5:** Simulation of SARS-CoV-2 infection dynamics in ALI-culture systems. Simulated infection dynamics within ALI-culture system of bronchial (**Movie2**) and nasal epithelium (**Movie3**) and bronchial epithelium exposed to 2.5% (**Movie4**) and 5% (**Movie5**) cigarette smoke extract. Simulations comprise a total of ~4.7x10^4 cells at the start and are followed over 25 days. Uninfected (green/blue/orange) and infected (brown/purple/red) cells are indicated.
+
+## Model extensions and adaptations
+
+Additional extensions and adaptations to the basic model relate to the following publication:
+
+* Lukas P, Gibeaud A, Schumer C, Arruda J, Guedj J, Terrier O, Graw F: **“Multimodal data integration to determine viral and innate immune kinetics in human airway epithelium”**
+
+This publication contains further details on model structure and implementation. Adaptations include the following xml-files:
+
+* **Model_HOM.xml:** Simulation of viral spread within a homogeneous tissue (2D mono-layer)
+* **Model_HAE.xml:** Simulation of viral spread within pseudo-stratified human airway epithelium (w./o. innate immunity)
+* **Model_HAE_Phi.xml:** Simulation of viral spread within pseudo-stratified human airway epithelium considering innate immune dynamics (adapted implementation compared to the original implementation above)
+* **Model_HAE_Phi_star.xml:** Simulation of viral spread within pseudo-stratified human airway epithelium considering innate immune dynamics (adapted implementation compared to the original implementation above with fixed interferon production rate)
+* **Model_HAE_Phi_star_SARSCoV2.xml:** Model used for analysing SARS-CoV-2 infection dynamics in experimental HAE culture systems
+
+
