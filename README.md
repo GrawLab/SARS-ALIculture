@@ -22,7 +22,6 @@ The repository contains supporting movies that accompany the aforementioned arti
 * **Movie2-5:** Simulation of SARS-CoV-2 infection dynamics in ALI-culture systems. Simulated infection dynamics within ALI-culture system of bronchial (**Movie2**) and nasal epithelium (**Movie3**) and bronchial epithelium exposed to 2.5% (**Movie4**) and 5% (**Movie5**) cigarette smoke extract. Simulations comprise a total of ~4.7x10^4 cells at the start and are followed over 25 days. Uninfected (green/blue/orange) and infected (brown/purple/red) cells are indicated.
 
 ## [BayesHAE - Combining a multi-scale multi-cellular model of human airway epithelium with Bayesian inference using BayesFlow](https://github.com/GrawLab/SARS-ALIculture/tree/main/BayesHAE)
-‚
 
 This publication shows how the model can be combined with **BayesFlow** (https://bayesflow.org/main/index.html), a framework for neural posterior estimation relying on simulation-trained neural networks, to allow parameter inference of viral and immune related processes.
 
