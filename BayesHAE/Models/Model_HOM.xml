@@ -1,0 +1,322 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<MorpheusModel version="4">
+    <Description>
+        <Details>Target cell limited model for homogeneous tissue
+</Details>
+        <Title>Model_HOM</Title>
+    </Description>
+    <Space>
+        <Lattice class="square">
+            <Neighborhood>
+                <Order>2</Order>
+            </Neighborhood>
+            <Size symbol="size" value="sqrt(3.1415*(sqrt(4*(10000/0.0414)/3.1415)*0.5 )^2),sqrt(3.1415*(sqrt(4*(10000/0.0414)/3.1415)*0.5 )^2),0"/>
+            <BoundaryConditions>
+                <Condition type="periodic" boundary="-x"/>
+                <Condition type="periodic" boundary="x"/>
+                <Condition type="periodic" boundary="-y"/>
+                <Condition type="periodic" boundary="y"/>
+            </BoundaryConditions>
+            <!--    <Disabled>
+        <Domain boundary-type="noflux">
+            <Circle diameter="554.57"/>
+        </Domain>
+    </Disabled>
+-->
+        </Lattice>
+        <SpaceSymbol symbol="space"/>
+    </Space>
+    <Time>
+        <StartTime value="0"/>
+        <StopTime value="500"/>
+        <TimeSymbol symbol="time"/>
+    </Time>
+    <Analysis>
+        <ModelGraph format="png" reduced="false" include-tags="#untagged"/>
+        <Gnuplotter decorate="false" time-step="96">
+            <Plot>
+                <Cells value="cell.type">
+                    <ColorMap>
+                        <Color value="1" color="dark-salmon"/>
+                        <Color value="2" color="red"/>
+                        <Color value="3" color="red"/>
+                    </ColorMap>
+                </Cells>
+            </Plot>
+            <Terminal name="png" size="2000, 2000, 0"/>
+        </Gnuplotter>
+        <Logger time-step="96">
+            <Input>
+                <Symbol symbol-ref="cell.type"/>
+                <Symbol symbol-ref="betaC"/>
+                <Symbol symbol-ref="p_infCil"/>
+                <Symbol symbol-ref="internal_load"/>
+                <Symbol symbol-ref="infected_neighbors"/>
+                <Symbol symbol-ref="viralsekretion"/>
+                <Symbol symbol-ref="inf_neighbors"/>
+                <Symbol symbol-ref="cell.center.x"/>
+                <Symbol symbol-ref="cell.center.y"/>
+                <Symbol symbol-ref="infection_type"/>
+            </Input>
+            <Output>
+                <TextOutput/>
+            </Output>
+        </Logger>
+        <Logger time-step="4">
+            <Input>
+                <Symbol symbol-ref="celltype.ciliated.size"/>
+                <Symbol symbol-ref="celltype.ciliated_infected.size"/>
+                <Symbol symbol-ref="celltype.ciliated_infectious.size"/>
+                <Symbol symbol-ref="total_viral_load"/>
+            </Input>
+            <Output>
+                <TextOutput/>
+            </Output>
+            <Plots>
+                <Plot time-step="-1">
+                    <Style style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis>
+                        <Symbol symbol-ref="celltype.ciliated.size"/>
+                        <Symbol symbol-ref="celltype.ciliated_infectious.size"/>
+                        <Symbol symbol-ref="celltype.ciliated_infected.size"/>
+                    </Y-axis>
+                </Plot>
+                <Plot time-step="-1">
+                    <Style style="points"/>
+                    <Terminal terminal="png"/>
+                    <X-axis>
+                        <Symbol symbol-ref="time"/>
+                    </X-axis>
+                    <Y-axis logarithmic="true">
+                        <Symbol symbol-ref="total_viral_load"/>
+                    </Y-axis>
+                </Plot>
+            </Plots>
+        </Logger>
+    </Analysis>
+    <Global>
+        <Constant symbol="Nmax" value="10000*1.288"/>
+        <Constant symbol="timestepsize" value="0.25"/>
+        <Constant symbol="init_cell_number" value="10000"/>
+        <Constant symbol="deltaCil" value="0.029/24*timestepsize&#xa;"/>
+        <Function symbol="cell_number">
+            <Expression>sum(celltype.ciliated.size, celltype.ciliated_infected.size, celltype.ciliated_infectious.size)</Expression>
+        </Function>
+        <Constant symbol="locality" value="15"/>
+        <Constant symbol="betaC" value="10^(-9.430063)*10000/locality*timestepsize*(1-cc_ct_ratio)*10^(-beta_adjuster)"/>
+        <Constant symbol="kappaC" value="4*0.217471*timestepsize"/>
+        <Constant symbol="rhoC" value="10^(4.689795)*timestepsize*10^(rho_adjuster)"/>
+        <Constant symbol="dc_I" value="4*0.074392*timestepsize"/>
+        <Constant symbol="c" value="0.63*timestepsize"/>
+        <Field symbol="ViralLoad" value="0.0">
+            <Diffusion rate="20"/>
+        </Field>
+        <Variable symbol="add_infection" value="0"/>
+        <System time-step="1.0" solver="Bogacki-Shampine [adaptive, O(3)]">
+            <DiffEqn symbol-ref="ViralLoad">
+                <Expression>viralsekretion + add_infection - c * ViralLoad</Expression>
+            </DiffEqn>
+        </System>
+        <Event trigger="when-true">
+            <Condition>time >= 25</Condition>
+            <Rule symbol-ref="add_infection">
+                <Expression>0</Expression>
+            </Rule>
+        </Event>
+        <Event>
+            <Condition>time >= 24.5 and time &lt; 25.5</Condition>
+            <Rule symbol-ref="add_infection">
+                <Expression>2.6*10^6/((sqrt(3.1415*(sqrt(4*(init_cell_number/0.0414)/3.1415)*0.5 )^2))^2)*init_cell_number/47177*800</Expression>
+            </Rule>
+        </Event>
+        <Variable symbol="total_viral_load" value="0.0"/>
+        <Mapper>
+            <Input value="ViralLoad"/>
+            <Output symbol-ref="total_viral_load" mapping="sum"/>
+        </Mapper>
+        <Constant symbol="ccbetaC" value="4.33*cc_ct_ratio/cceffectivness"/>
+        <Constant symbol="ccrhoC" value="0.48590*timestepsize"/>
+        <Constant symbol="cceffectivness" value="20"/>
+        <Constant symbol="Ninfmax" value="(1-0.397)*init_cell_number"/>
+        <Constant symbol="cc_reduced" value=" 0.2 "/>
+        <Constant symbol="cc_ct_ratio" value=" 0.371052631578947 "/>
+        <Constant symbol="beta_adjuster" value="0"/>
+        <Constant symbol="rho_adjuster" value="0.5"/>
+        <Constant symbol="mcs_duration" value="1"/>
+    </Global>
+    <CellTypes>
+        <CellType class="medium" name="medium">
+            <Property symbol="viralsekretion" value="0"/>
+            <Property symbol="IFN_secretion" value="0"/>
+            <Property symbol="cIFN" value="0.1*timestepsize"/>
+        </CellType>
+        <CellType class="biological" name="ciliated">
+            <ConnectivityConstraint/>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <VolumeConstraint strength="100" target="60"/>
+            <CellDeath>
+                <Condition>rand_uni(0,1)&lt; p_deathCil
+</Condition>
+            </CellDeath>
+            <Function symbol="p_deathCil">
+                <Expression>1-exp(-deltaCil)</Expression>
+            </Function>
+            <Property symbol="viralsekretion" value="0"/>
+            <ChangeCellType time-step="1.0" newCellType="ciliated_infected">
+                <Condition>rand_uni(0,1)&lt;p_infCil</Condition>
+                <Triggers>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time</Expression>
+                    </Rule>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>1</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Function symbol="p_infCil">
+                <Expression>1-exp(-betaC*internal_load)</Expression>
+            </Function>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="internal_load" value="0.0"/>
+            <NeighborhoodReporter time-step="1.0">
+                <Input value="ccbetaC*( (cell.type == celltype.ciliated_infectious.id)*ccrhoC)" scaling="cell"/>
+                <Output symbol-ref="infected_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infected_neighbors" value="0.0"/>
+            <ChangeCellType time-step="1.0" newCellType="ciliated_infected">
+                <Condition>rand_uni(0,1)&lt;1-exp(-infected_neighbors)</Condition>
+                <Triggers>
+                    <Rule symbol-ref="infection_type">
+                        <Expression>2</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <Function symbol="testC">
+                <Expression>exp(-betaC*internal_load)</Expression>
+            </Function>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="ciliated_infected">
+            <Function symbol="p_Cbecomeinfectious">
+                <Expression>1-exp(-kappaC)</Expression>
+            </Function>
+            <ChangeCellType time-step="1.0" newCellType="ciliated_infectious">
+                <Condition>Compartment == 5</Condition>
+                <!--    <Disabled>
+        <Triggers>
+            <Rule symbol-ref="Compartment_IFN">
+                <Expression>Compartment_IFN</Expression>
+            </Rule>
+        </Triggers>
+    </Disabled>
+-->
+                <Triggers>
+                    <Rule symbol-ref="time_infected">
+                        <Expression>time</Expression>
+                    </Rule>
+                </Triggers>
+            </ChangeCellType>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <VolumeConstraint strength="100" target="60"/>
+            <Property symbol="t_birth_cil_inf" value="0.0"/>
+            <Property symbol="viralsekretion" value="0"/>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_Cbecomeinfectious</Condition>
+                <Rule symbol-ref="Compartment">
+                    <Expression>Compartment + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment" value="0.0"/>
+            <ConnectivityConstraint/>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+        <CellType class="biological" name="ciliated_infectious">
+            <CellDeath>
+                <Condition>Compartment_d == 5</Condition>
+            </CellDeath>
+            <Function symbol="p_deathCInfectious">
+                <Expression>1 - exp(-dc_I)</Expression>
+            </Function>
+            <SurfaceConstraint strength="100" target=".9" mode="aspherity"/>
+            <VolumeConstraint strength="100" target="60"/>
+            <Property symbol="t_birth_cil" value="0.0"/>
+            <Property symbol="viralsekretion" value="rhoC/cell.volume"/>
+            <Equation symbol-ref="viralsekretion">
+                <Expression>rhoC/cell.volume </Expression>
+            </Equation>
+            <Event trigger="when-true" time-step="1.0">
+                <Condition>rand_uni(0,1)&lt;p_deathCInfectious</Condition>
+                <Rule symbol-ref="Compartment_d">
+                    <Expression>Compartment_d + 1</Expression>
+                </Rule>
+            </Event>
+            <Property symbol="Compartment_d" value="0.0"/>
+            <ConnectivityConstraint/>
+            <Property symbol="internal_load" value="0.0"/>
+            <Mapper name="internal viral load" time-step="1.0">
+                <Input value="ViralLoad"/>
+                <Output symbol-ref="internal_load" mapping="sum"/>
+            </Mapper>
+            <Property symbol="time_infected" value="0.0"/>
+            <Property symbol="inf_neighbors" value="0.0"/>
+            <NeighborhoodReporter>
+                <Input value="cell.type == 2 or cell.type == 3 or cell.type == 8 or cell.type == 5 or cell.type == 6 or cell.type == 9" scaling="cell"/>
+                <Output symbol-ref="inf_neighbors" mapping="sum"/>
+            </NeighborhoodReporter>
+            <Property symbol="infection_type" value="0.0"/>
+        </CellType>
+    </CellTypes>
+    <CellPopulations>
+        <Population type="ciliated" name="ciliated" size="0">
+            <!--    <Disabled>
+        <InitCircle name="ciliated" number-of-cells="1*init_cell_number" tags="" mode="random">
+            <Dimensions radius="size.x/2" center="size.x/2,size.y/2,0"/>
+        </InitCircle>
+    </Disabled>
+-->
+            <InitRectangle number-of-cells="1*init_cell_number" mode="regular">
+                <Dimensions origin="0.0, 0.0, 0.0" size="size.x,size.y,0"/>
+            </InitRectangle>
+        </Population>
+    </CellPopulations>
+    <CPM>
+        <Interaction>
+            <Contact value="10" type1="ciliated" type2="ciliated"/>
+        </Interaction>
+        <ShapeSurface scaling="norm">
+            <Neighborhood>
+                <Order>6</Order>
+            </Neighborhood>
+        </ShapeSurface>
+        <MonteCarloSampler stepper="edgelist">
+            <MCSDuration value="1"/>
+            <MetropolisKinetics temperature="37"/>
+            <Neighborhood>
+                <Order>2</Order>
+            </Neighborhood>
+        </MonteCarloSampler>
+    </CPM>
+</MorpheusModel>
