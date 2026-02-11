@@ -26,3 +26,5 @@ The repository contains supporting movies that accompany the aforementioned arti
 This publication shows how the model can be combined with **BayesFlow** (https://bayesflow.org/main/index.html), a framework for neural posterior estimation relying on simulation-trained neural networks, to allow parameter inference of viral and immune related processes.
 
 * Lukas P, Gibeaud A, Schumer C, Arruda J, Guedj J, Terrier O, Graw F: **“Multimodal data integration to determine viral and innate immune kinetics in human airway epithelium”**
+
+Please follow the following link for further information: [BayesHAE](https://github.com/GrawLab/SARS-ALIculture/tree/main/BayesHAE)
