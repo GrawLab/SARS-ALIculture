@@ -1,4 +1,4 @@
-MIT License
+MIT+ License
 
 Copyright (c) 2022 GrawLab
 
@@ -20,3 +20,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Please note that the right to modify only applies to the software code. All other items (movies, figures, files) can be used without modifications if the original authors are cited.
+Please also note that this license only applies to the model code and scripts that were developed by the authors and does not affect other software packages, such as Morpheus and BayesFlow, that the code depends on. In these circumstances the most strict license applies.
